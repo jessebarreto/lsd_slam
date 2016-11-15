@@ -11,6 +11,8 @@ set(CMAKE_BUILD_TYPE Release)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
+  OpenCV REQUIRED
+  cmake_modules REQUIRED
   dynamic_reconfigure
   sensor_msgs
   image_transport
@@ -42,7 +44,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   LIBRARIES lsdslam
   DEPENDS Eigen SuiteSparse
-  CATKIN_DEPENDS libg2o 
+  CATKIN_DEPENDS libg2o
 )
 
 # SSE flags
@@ -52,7 +54,7 @@ add_definitions("-DENABLE_SSE")
 # Also add some useful compiler flag
 set(CMAKE_CXX_FLAGS
    "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
-) 
+)
 
 # Set source files
 set(lsd_SOURCE_FILES
@@ -97,7 +99,7 @@ include_directories(
 
 # build shared library.
 add_library(lsdslam SHARED ${SOURCE_FILES})
-target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} csparse cxsparse )
+target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} csparse cxsparse X11 ${OpenCV_LIBS})
 #rosbuild_link_boost(lsdslam thread)
 
 
@@ -111,5 +113,4 @@ add_executable(dataset src/main_on_images.cpp)
 target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
 
 # TODO add INSTALL
-
 
